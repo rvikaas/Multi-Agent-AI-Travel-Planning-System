@@ -1,4 +1,4 @@
-We are going to create an AI Travel Planning System that uses 4 specialized AI agents:
+An AI Travel Planning System that uses 4 specialized AI agents:
 ✈️ Flight Agent
 🏨 Hotel Agent
 🗓️ Itinerary Agent
