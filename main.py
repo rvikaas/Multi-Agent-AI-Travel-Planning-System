@@ -62,8 +62,9 @@ def hotel_agent(state: TravelState):
     return{
         "hotel_results": hotel_results,
         "messages": [
-            AIMessage(content="Hotels Fetched")
+            AIMessage(content="Hotels Fetched"),
         ],
+        "llm_calls":state.get("llm_calls", 0) + 1
     }
 
 def itinerary_agent(state: TravelState):
