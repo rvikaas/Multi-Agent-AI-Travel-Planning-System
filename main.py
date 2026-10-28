@@ -99,7 +99,50 @@ def final_agent (state: TravelState):
         "llm_calls":state.get("llm_calls", 0) + 1
     }
 
+graph = StateGraph(TravelState)
+
 graph.add_node("flight_agent", flight_agent)
 graph.add_node("hotel_agent", hotel_agent)
 graph.add_node("itinerary_agent", itinerary_agent)
 graph.add_node("final_agent", final_agent)
+
+#workflow
+graph.add_edge(START, "flight_agent")
+graph.add_edge("flight_agent", "hotel_agent")
+graph.add_edge("hotel_agent", "itinerary_agent")
+graph.add_edge("itinerary_agent", "final_agent")
+graph.add_edge("final_agent", END)
+
+conn = psycopg.connect(DATABASE_URL)
+memory = PostgresSaver(conn)
+memory.setup()
+
+app = graph.compile(checkpointer=memory)
+
+if __name__ == "__main__":
+    config = {
+        "configurable": {
+            "thread_id":"travel_planner"
+        }
+    }
+
+    user_input = input("Enter travel request:")
+
+    result = app.invoke(
+        {
+            "messages": [
+                HumanMessage(content=user_input)
+            ],
+            "user_query": user_input,
+            "flight_results": "",
+            "hotel_results": "",
+            "itinerary": "",
+            "llm_calls": 0
+        },
+        config=config
+    )
+
+    print("\nFinal Response\n")
+
+    for msg in result["messages"]:
+        print(msg.content)
