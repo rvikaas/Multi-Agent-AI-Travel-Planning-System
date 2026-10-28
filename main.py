@@ -24,7 +24,7 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 llm = ChatGroq(
-    model="llma-3.3-70b-versatile"
+    model="openai/gpt-oss-120b"
 )
 
 class TravelState (TypedDict):
@@ -61,7 +61,7 @@ def hotel_agent(state: TravelState):
     }
 
 def itinerary_agent(state: TravelState):
-    prompt: f"""
+    prompt=f"""
     Create a travel itinerary
     User Query: {state["user_query"]}
 
@@ -69,10 +69,10 @@ def itinerary_agent(state: TravelState):
 
     Hotel Results:{state["hotel_results"]}
     """
-    response = llm.invoke({
+    response = llm.invoke([
         SystemMessage(content="You are an expert travel planner"),
         HumanMessage(content=prompt)
-    })
+    ])
 
     return{
         "itinerary": response.content,
@@ -81,7 +81,7 @@ def itinerary_agent(state: TravelState):
     }
 
 def final_agent (state: TravelState):
-    prompt: f"""
+    prompt= f"""
     Generate a final travel response
     
     Flights :{state["flight_results"]}
@@ -90,9 +90,9 @@ def final_agent (state: TravelState):
 
     Itinerary:{state['itinerary']}
     """
-    response = llm.invoke({
+    response = llm.invoke([
         HumanMessage(content=prompt)
-    })
+    ])
 
     return{
         "messages": [response],
@@ -114,6 +114,7 @@ graph.add_edge("itinerary_agent", "final_agent")
 graph.add_edge("final_agent", END)
 
 conn = psycopg.connect(DATABASE_URL)
+conn.autocommit = True
 memory = PostgresSaver(conn)
 memory.setup()
 

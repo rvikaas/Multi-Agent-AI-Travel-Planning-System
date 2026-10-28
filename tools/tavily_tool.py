@@ -23,7 +23,7 @@ def tavily_search(query):
         snippet = r.get("content", "").strip()
 
         if len(snippet) > 300:
-            snippet = snippet[:300].rsplilt(" ",1)[0] + ".."
+            snippet = snippet[:300].rsplit(" ",1)[0] + ".."
 
         results.append(f"{i}. **{title}**\n {url}\n {snippet}")
 

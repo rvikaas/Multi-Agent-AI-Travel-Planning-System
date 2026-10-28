@@ -6,7 +6,7 @@ load_dotenv()
 
 key = os.getenv("AVIATIONSTACK_API_KEY")
 
-def search_flight(query):
+def search_flights(query):
 
     url = "http://api.aviationstack.com/v1/flights"
 
@@ -34,7 +34,7 @@ def search_flight(query):
             
             status = flight.get("flight_status", "unknown")
 
-            flight.append(
+            flights.append(
                 f"""
                 Airline: {airline}
                 Departure: {departure}
