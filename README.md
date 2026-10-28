@@ -11,7 +11,6 @@ The system coordinates four specialized agents that work together to collect tra
 
 ## ✨ Features
 
-- Multi-agent orchestration with **LangGraph**
 - LLM-powered planning with **Groq** and `openai/gpt-oss-120b`
 - Flight data retrieval through **AviationStack**
 - Hotel and destination research through **Tavily Search**
