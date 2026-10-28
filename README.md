@@ -1,4 +1,4 @@
-# ✈️ Multi-Agent AI Travel Booking System
+# ✈️ Multi-Agent AI Travel Planning System
 
 A multi-agent travel planning application that combines LangGraph, Groq, PostgreSQL, Tavily Search, AviationStack, and Streamlit to generate personalized travel plans.
 
