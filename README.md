@@ -54,29 +54,6 @@ The workflow is defined in `main.py` as a sequential LangGraph pipeline:
 START → flight_agent → hotel_agent → itinerary_agent → final_agent → END
 ```
 
-## 📁 Project Structure
-
-```text
-.
-├── main.py                 # LangGraph workflow and CLI entry point
-├── frontend.py             # Streamlit web interface
-├── requirements.txt        # Python dependencies
-├── tools/
-│   ├── flight_tool.py      # AviationStack flight search integration
-│   └── tavily_tool.py      # Tavily web search integration
-├── travel_plans/           # Generated plans; ignored by Git
-├── .env                    # Local secrets; ignored by Git
-└── .gitignore
-```
-
-## ✅ Prerequisites
-
-- Python 3.10 or newer
-- A PostgreSQL database
-- A Groq API key
-- A Tavily API key
-- An AviationStack API key
-
 ## 🚀 Installation
 
 ### 1. Clone the repository
@@ -169,63 +146,3 @@ Enter travel request: Plan a weekend trip to Paris with flights and hotels
 4. The **Itinerary Agent** uses the user request, flight results, and hotel results to create an itinerary.
 5. The **Final Agent** combines the collected information into the final response.
 6. LangGraph stores workflow checkpoints in PostgreSQL using the configured thread ID.
-
-## ⚙️ Configuration Notes
-
-- The Streamlit sidebar includes a **User ID** field that is used as the LangGraph `thread_id` for maintaining separate conversation histories.
-- The CLI currently uses the default thread ID `travel_planner`.
-- Generated files are written to `travel_plans/`, which is excluded from version control.
-- API responses depend on the availability, coverage, and limits of the external AviationStack and Tavily services.
-
-## ⚠️ Important Considerations
-
-- This project provides AI-generated travel research and planning suggestions. Always verify flight availability, prices, hotel details, visa requirements, and local regulations before booking.
-- Never expose API keys in source code or commit them to GitHub.
-- The application depends on external APIs and a PostgreSQL database, so network access and valid credentials are required.
-- The AviationStack integration currently requests a limited set of flight records. Additional filtering and route-specific parameters can be added to `tools/flight_tool.py` as needed.
-
-## 🛠️ Troubleshooting
-
-### `DATABASE_URL` errors
-
-- Confirm PostgreSQL is running.
-- Check that the database, username, password, host, and port are correct.
-- Verify that `DATABASE_URL` is loaded from `.env`.
-
-### Missing API key errors
-
-- Confirm that `.env` is in the project root.
-- Check that variable names match the names shown above.
-- Restart the application after changing environment variables.
-
-### No flight or hotel results
-
-- Confirm the relevant API key is valid.
-- Check your network connection and provider quota.
-- Inspect the response returned by the corresponding tool in `tools/`.
-
-## 🧪 Development
-
-To add another specialist agent:
-
-1. Add a new state field to `TravelState` in `main.py`.
-2. Implement the agent function.
-3. Register the function with `graph.add_node(...)`.
-4. Connect it to the workflow with `graph.add_edge(...)`.
-5. Add corresponding display logic to `frontend.py` if the agent should appear in the UI.
-
-## 📄 License
-
-No license has been specified for this repository yet. Add a license before distributing or reusing the project publicly.
-
-## 🙌 Acknowledgements
-
-This project uses:
-
-- [LangGraph](https://github.com/langchain-ai/langgraph)
-- [LangChain](https://github.com/langchain-ai/langchain)
-- [Groq](https://groq.com/)
-- [Tavily](https://tavily.com/)
-- [AviationStack](https://aviationstack.com/)
-- [Streamlit](https://streamlit.io/)
-- [PostgreSQL](https://www.postgresql.org/)
