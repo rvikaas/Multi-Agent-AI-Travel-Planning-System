@@ -45,19 +45,25 @@ def flight_agent(state: TravelState):
         "messages": [
             AIMessage(content=f"Flights Fetched")
         ],
-        #"llm_calls":state.get("llm_calls", 0) + 1
     }
 
 def hotel_agent(state: TravelState):
-    query = f"Best hotels for {state['user_query']}"
-    hotel_results = tavily_search(query)
+    prompt= f"""
+    Create a concise search query for finding hotels based on the following user request.
+    User Query: {state["user_query"]}
+    Output only the search query.
+    """
+    response = llm.invoke([
+            HumanMessage(content=prompt)
+    ])
+    
+    hotel_results = tavily_search(response.content.strip())
 
     return{
         "hotel_results": hotel_results,
         "messages": [
             AIMessage(content="Hotels Fetched")
         ],
-        #"llm_calls":state.get("llm_calls", 0) + 1
     }
 
 def itinerary_agent(state: TravelState):
